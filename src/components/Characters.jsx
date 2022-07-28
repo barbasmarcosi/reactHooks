@@ -1,5 +1,13 @@
-import { useState, useEffect, useReducer, useMemo, useRef } from "react";
+import {
+  useState,
+  useEffect,
+  useReducer,
+  useMemo,
+  useRef,
+  useCallback,
+} from "react";
 import "../index.css";
+import Searcher from "./Searcher";
 
 const initialState = {
   favorites: [],
@@ -44,6 +52,10 @@ const Characters = () => {
     [characters, search]
   );
 
+  const onSearch = useCallback(() => {
+    setSearch(searchInput.current.value);
+  }, []);
+
   return (
     <div className="Characters">
       <div className="Utils">
@@ -53,13 +65,10 @@ const Characters = () => {
         >
           Favorites
         </button>
-        <input
-          ref={searchInput}
-          placeholder="Search character"
-          type="text"
-          className="Searcher"
-          value={search}
-          onChange={() => setSearch(searchInput.current.value)}
+        <Searcher
+          search={search}
+          onSearch={onSearch}
+          searchInput={searchInput}
         />
       </div>
       <ul className={showFavorites ? "Favorites" : "Favorites--none"}>
