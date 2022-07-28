@@ -1,4 +1,4 @@
-import { useState, useEffect, useReducer, useMemo } from "react";
+import { useState, useEffect, useReducer, useMemo, useRef } from "react";
 import "../index.css";
 
 const initialState = {
@@ -21,6 +21,7 @@ const Characters = () => {
   const [characters, setCharacters] = useState([]);
   const [showFavorites, setShowFavorites] = useState(false);
   const [search, setSearch] = useState("");
+  const searchInput = useRef(null);
   const [favorites, dispatch] = useReducer(favoriteReducer, initialState);
 
   useEffect(() => {
@@ -33,10 +34,6 @@ const Characters = () => {
     if (!favorites.favorites.includes(favorite)) {
       dispatch({ type: "ADD_TO_FAVORITES", payload: favorite });
     }
-  };
-
-  const onSearch = (event) => {
-    setSearch(event.target.value);
   };
 
   const filteredUsers = useMemo(
@@ -57,11 +54,12 @@ const Characters = () => {
           Favorites
         </button>
         <input
-            placeholder="Search character"
+          ref={searchInput}
+          placeholder="Search character"
           type="text"
           className="Searcher"
           value={search}
-          onChange={onSearch}
+          onChange={() => setSearch(searchInput.current.value)}
         />
       </div>
       <ul className={showFavorites ? "Favorites" : "Favorites--none"}>
